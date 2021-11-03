@@ -23,37 +23,46 @@ router.get("/api/workouts", (req, res) => {
             },
         },
     ])
-    .then((dbWorkouts) => {
-        res.json(dbWorkouts);
-    })
+        .then((dbWorkouts) => {
+            res.json(dbWorkouts);
+        })
         .catch((err) => {
             res.json(err);
         });
 })
 
 // MY WORK
-router.put('/api/workouts', (req, res) => {
-    
-    Workout.update(req.body, {
-      where: {
-        id: req.params.id,
-      },
-    }) 
-      .then((dbWorkouts) => res.status(200).json(dbWorkouts))
-      .catch((err) => res.status(500).json(err))
-  });
-  
-  router.delete('/:id', (req, res) => {
+router.put('/api/workouts/:id', (req, res) => {
+
+    Workout.findByIdAndUpdate(req.params.id, {
+        $push: {
+            exercises: (req.body)
+        }
+    },
+        {
+            new: true, runvalidators: true
+
+        })
+        .then((dbWorkouts) => res.status(200).json(dbWorkouts))
+        .catch((err) => res.status(500).json(err))
+});
+
+router.delete('/api/workouts/:id', (req, res) => {
+
    
-    Workout.destroy({ 
-      where: {
-        id: req.params.id
-      },
-    }) 
-    .then((dbWorkouts) => res.status(200).json(dbWorkouts))
-      .catch((err) => res.status(500).json(err))
-  });
-  
+    Workout.findByIdAndUpdate(req.params.id, {
+        $pull: {
+            exercises: (req.body)
+        }
+    },
+        {
+            new: true, runvalidators: true
+
+        })
+        .then((dbWorkouts) => res.status(200).json(dbWorkouts))
+        .catch((err) => res.status(500).json(err))
+});
+
 
 
 
