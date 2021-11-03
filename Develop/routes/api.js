@@ -31,6 +31,30 @@ router.get("/api/workouts", (req, res) => {
         });
 })
 
+// MY WORK
+router.put('/api/workouts', (req, res) => {
+    // update a tag's name by its `id` value
+    Workout.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    }) 
+      .then((dbWorkouts) => res.status(200).json(dbWorkouts))
+      .catch((err) => res.status(500).json(err))
+  });
+  
+  router.delete('/:id', (req, res) => {
+    // delete on tag by its `id` value
+    Workout.destroy({ 
+      where: {
+        id: req.params.id
+      },
+    }) 
+    .then((dbWorkouts) => res.status(200).json(dbWorkouts))
+      .catch((err) => res.status(500).json(err))
+  });
+  
+
 
 
 module.exports = router;
